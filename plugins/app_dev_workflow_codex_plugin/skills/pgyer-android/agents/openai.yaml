@@ -1,0 +1,3 @@
+interface:
+  display_name: "Android 提测到蒲公英"
+  short_description: "执行 Android fastlane beta 提测"
