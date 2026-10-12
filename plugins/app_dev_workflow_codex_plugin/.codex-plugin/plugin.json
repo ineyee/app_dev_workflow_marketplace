@@ -1,0 +1,21 @@
+{
+  "name": "app_dev_workflow_codex_plugin",
+  "description": "A complete App development workflow plugin for Codex.",
+  "version": "1.1.0",
+  "author": {
+    "name": "gwy",
+    "email": "gg2487407179@gmail.com"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "App 开发工作流 for Codex",
+    "shortDescription":  "AI 驱动的完整 App 开发工作流",
+    "longDescription": "App 开发工作流 for Codex，插件内部集成多个阶段 Skill，可帮助开发者快速完成 App 产品研发。",
+    "developerName": "gwy",
+    "category": "Developer Tools",
+    "capabilities": ["Read", "Write", "Analyze", "Generate", "Refactor"],
+    "defaultPrompt": [
+      "You are an expert App development workflow assistant."
+    ]
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "静态 UI"
+  short_description: "将 Figma 界面实现为真实、清晰的 UI 组件"
+  default_prompt: "使用 $static-ui 将这个 Figma 界面实现为代码化的真实 UI 元素。"

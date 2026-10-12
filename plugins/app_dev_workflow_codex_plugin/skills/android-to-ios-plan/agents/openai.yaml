@@ -1,0 +1,7 @@
+interface:
+  display_name: "Android 转 iOS 实施计划"
+  short_description: "把 Android 功能整理成可执行的 iOS 原生计划"
+  default_prompt: "使用 $android-to-ios-plan 生成当前 Android 功能对应的 iOS 原生实施计划。"
+
+policy:
+  allow_implicit_invocation: true
