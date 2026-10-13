@@ -1,0 +1,7 @@
+interface:
+  display_name: "修复 BUG"
+  short_description: "从飞书缺陷链接开始执行可控的 Bug 修复流程"
+  default_prompt: "使用 $bug-fix 根据飞书缺陷链接修复 Bug。"
+
+policy:
+  allow_implicit_invocation: true
