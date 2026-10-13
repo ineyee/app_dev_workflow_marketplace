@@ -1,0 +1,7 @@
+interface:
+  display_name: "反推 PRD"
+  short_description: "从现有证据反推可执行的中文 PRD"
+  default_prompt: "使用 $reverse-prd 将当前会话已落地需求，或指定主题对应的项目证据，整合成可执行的中文 Markdown PRD；按用户要求保存本地或上传到飞书。"
+
+policy:
+  allow_implicit_invocation: true
