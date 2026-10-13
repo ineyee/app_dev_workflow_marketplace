@@ -1,0 +1,4 @@
+interface:
+  display_name: "iOS 发版到 AppStore"
+  short_description: "解析双语发版说明并执行 iOS App Store 发布"
+  default_prompt: "使用 $app-store-ios 执行 iOS App Store 发版。"

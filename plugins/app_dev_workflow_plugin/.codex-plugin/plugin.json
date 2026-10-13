@@ -1,7 +1,7 @@
 {
   "name": "app_dev_workflow_plugin",
   "description": "A complete App development workflow plugin.",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "author": {
     "name": "gwy",
     "email": "gg2487407179@gmail.com"
