@@ -5,10 +5,10 @@
   },
   "plugins": [
     {
-      "name": "app_dev_workflow_codex_plugin",
+      "name": "app_dev_workflow_plugin",
       "source": {
         "source": "local",
-        "path": "./plugins/app_dev_workflow_codex_plugin"
+        "path": "./plugins/app_dev_workflow_plugin"
       },
       "policy": {
         "installation": "AVAILABLE",
