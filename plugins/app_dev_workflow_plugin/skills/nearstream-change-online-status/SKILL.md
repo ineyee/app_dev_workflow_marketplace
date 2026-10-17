@@ -10,8 +10,17 @@ user-invocable: true
 
 调用时用户须提供完整目标版本号（如 `999.5.2`）、中文发版内容、英文发版内容，如果检测到用户没有填写，则弹窗向用户收集。
 
-发布成功后，必须调用本 skill 目录中的 `notify_wecom.py` 发送企微通知。通知脚本只提供 `online-status` 命令，通知内容固定为：
-`【iOS 端】+【Android 端】已上线，线上版本号：{目标版本号}`。
+发布成功后，必须调用本 skill 目录中的 `notify_wecom.py` 发送企微通知。通知脚本只提供 `online-status` 命令，通知内容格式为：
+
+```text
+【iOS 端】+【Android 端】已上线，上线版本号：{目标版本号}
+中文 Release Note：
+{本次中文发版内容}
+英文 Release Note：
+{本次英文发版内容}
+```
+
+Release Note 使用本次写入 descriptions 的中英文发版内容原文，保留 Markdown 和换行，不包含历史版本内容，也不包含输入时的分隔提示行或 `-----------`。通知通过原有手机号提及列表 @人员。
 
 通知脚本使用与 review 提审通知相同的 webhook、手机号提及和版本阈值保护；目标版本号低于 `999.999.999` 才发送，达到或超过该值时跳过发送。
 
@@ -132,15 +141,21 @@ snapshot 确认表单加载后：
 
 ### 12. 发布成功后发送企微通知
 
-仅在确认页面显示发布成功后执行。将当前工作目录切换到本 skill 目录，也就是同时包含本 `SKILL.md` 和 `notify_wecom.py` 的目录，再执行：
+仅在确认页面显示发布成功后执行。将本次写入 descriptions 的中英文发版内容分别原样保存为两个 UTF-8 临时文件，使用文件写入工具或 Python 文件 API，避免通过 shell 插值写入 Markdown。两段内容均不能为空。
+
+将当前工作目录切换到本 skill 目录，也就是同时包含本 `SKILL.md` 和 `notify_wecom.py` 的目录，再执行（文件参数替换为实际临时文件路径）：
 
 ```bash
-python3 ./notify_wecom.py online-status --version "{目标版本号}"
+python3 ./notify_wecom.py online-status --version "{目标版本号}" \
+  --chinese-release-note-file "{中文发版内容临时文件路径}" \
+  --english-release-note-file "{英文发版内容临时文件路径}"
 ```
 
 - 目标版本号 `< 999.999.999`：确认脚本输出包含 `sent online-status`，再继续后续步骤。
 - 目标版本号 `>= 999.999.999`（包括 `999.999.999`）：脚本输出应包含 `skipped online-status`，不要把它报告为发送成功。
 - 如果脚本返回非零退出码或输出 `notify_wecom: ...` 错误：记录错误原因，并明确告知用户线上发布已成功但企微通知失败。
+
+脚本执行结束后清理本次创建的临时文件。
 
 不要假设 skill 安装在固定绝对路径；始终从当前加载的 skill 目录执行脚本。
 

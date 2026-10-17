@@ -7,7 +7,7 @@ description: Use when the user explicitly invokes $app-store-ios or asks to publ
 
 ## 目的
 
-使用项目已有的 Fastlane `ios release` lane 完成 iOS App Store Connect 发版。这个 skill 只负责收集双语 Release Note、解析输入并调用现有 lane，不修改 `Fastfile`，不改写文案，也不自动提交审核。
+使用项目已有的 Fastlane `ios release` lane 完成 iOS App Store Connect 发版，创建版本时默认选择“审核通过后自动发布此版本”。这个 skill 负责收集双语 Release Note、解析输入、检查发布方式并调用现有 lane；除下述发布方式配置外，不修改 `Fastfile`，不改写文案，也不自动提交审核。
 
 ## 触发
 
@@ -29,6 +29,17 @@ description: Use when the user explicitly invokes $app-store-ios or asks to publ
    - `english_release_note`
 
 如果检查失败，报告缺少项并停止，不自行修改 Fastfile 或猜测其它 lane 名称。
+
+## 默认发布方式
+
+- 除非用户本次明确要求手动发布或定时发布，创建版本时必须使用“自动发布此版本”，即审核通过后自动发布，不设置最早发布日期。
+- 检查 `release` 实际调用的 `upload_to_app_store` / `deliver` 及其配置，确保生效参数为 `automatic_release: true`，且没有生效的 `auto_release_date`。不能只把 `automatic_release:true` 追加为 lane 参数；现有 lane 未接收并传递时，该参数不会配置上传 action。
+- 如果项目尚未配置自动发布，或现有配置为手动／定时发布，允许仅为本次发布方式对现有上传 action 或其配置作最小修改：显式设置 `automatic_release: true`，移除冲突的 `auto_release_date`。不要重写 lane 或修改其它构建、签名、上传逻辑；若无法确定实际生效配置，报告原因并停止。
+- 发布方式需要随版本 metadata 写入 App Store Connect；如果现有流程跳过 metadata 或无法写入发布方式，报告阻碍并停止，不把本地配置当作远端已生效。
+- 保持 `submit_for_review: false`：自动发布控制审核通过后的行为，不代表自动提交审核。不要为设置自动发布而开启自动提审。
+- 上传后通过可用的 App Store Connect API 或页面回读目标版本，核对 `releaseType` 为 `AFTER_APPROVAL`（页面显示“自动发布此版本”）。无法回读时，在结果中明确说明发布方式尚未验证；若仍为手动或定时发布，报告未完成，不宣称设置成功。
+
+参数说明见 [Fastlane upload_to_app_store 文档](https://docs.fastlane.tools/actions/upload_to_app_store/)。
 
 ## 收集 Release Note
 
@@ -84,4 +95,5 @@ bundle exec fastlane ios release \
 - `fastlane ios release` 是否成功；
 - 构建和 App Store Connect 上传是否成功；
 - 双语 Release Note 是否已传递；
+- 审核通过后的发布方式及远端核验结果；默认应为“审核通过后自动发布此版本”；
 - 明确说明该 lane 默认 `submit_for_review: false`，因此不会自动提交审核，用户仍需在 App Store Connect 检查版本、选择构建并手动提交审核。
